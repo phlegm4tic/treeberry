@@ -8,6 +8,19 @@ if (api) {
   patchTheme()
   patchMenus()
   patchTabs()
+  patchSearch()
+}
+
+// Firefox's search.search({ query, tabId|disposition }) maps to Chromium's
+// search.query({ text, tabId|disposition }).
+function patchSearch() {
+  if (!api.search?.query || api.search.search) return
+  api.search.search = (info: any = {}) => {
+    const query: any = { text: info.query }
+    if (info.tabId !== undefined) query.tabId = info.tabId
+    else if (info.disposition) query.disposition = info.disposition
+    return api.search.query(query)
+  }
 }
 
 // Containers are Firefox-only; Chromium's tabs.create rejects a cookieStoreId,
@@ -22,6 +35,10 @@ function patchTabs() {
 
   // Tab warmup (on hover) is Firefox-only
   if (!tabs.warmup) tabs.warmup = () => Promise.resolve()
+
+  // captureTab (per-tab thumbnail for previews) is Firefox-only; Chromium can only
+  // capture the visible tab. Return an empty image so the preview just shows no shot.
+  if (!tabs.captureTab) tabs.captureTab = () => Promise.resolve('')
 
   if (!tabs.create) return
   const create = tabs.create.bind(tabs)

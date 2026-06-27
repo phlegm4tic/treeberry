@@ -333,21 +333,23 @@ export function updateActiveSection(scrollTop: number): void {
 export async function getDbgDetails(): Promise<T.DbgInfo> {
   const dbg: T.DbgInfo = {
     addonVersion: browser.runtime.getManifest().version,
-    firefoxVersion: (await browser.runtime.getBrowserInfo()).version,
+    firefoxVersion: (await browser.runtime.getBrowserInfo?.())?.version ?? '',
     settings: Utils.cloneObject(Settings.state),
   }
 
   try {
+    const has = (q: Parameters<typeof browser.permissions.contains>[0]) =>
+      browser.permissions.contains(q).catch(() => false)
     const perms = await Promise.all([
-      browser.permissions.contains({ origins: ['<all_urls>'] }),
-      browser.permissions.contains({ permissions: ['webRequest'] }),
-      browser.permissions.contains({ permissions: ['webRequestBlocking'] }),
-      browser.permissions.contains({ permissions: ['proxy'] }),
-      browser.permissions.contains({ permissions: ['tabHide'] }),
-      browser.permissions.contains({ permissions: ['clipboardWrite'] }),
-      browser.permissions.contains({ permissions: ['history'] }),
-      browser.permissions.contains({ permissions: ['bookmarks'] }),
-      browser.permissions.contains({ permissions: ['downloads'] }),
+      has({ origins: ['<all_urls>'] }),
+      has({ permissions: ['webRequest'] }),
+      has({ permissions: ['webRequestBlocking'] }),
+      has({ permissions: ['proxy'] }),
+      has({ permissions: ['tabHide'] }),
+      has({ permissions: ['clipboardWrite'] }),
+      has({ permissions: ['history'] }),
+      has({ permissions: ['bookmarks'] }),
+      has({ permissions: ['downloads'] }),
     ])
     dbg.permissions = {
       allUrls: perms[0],
