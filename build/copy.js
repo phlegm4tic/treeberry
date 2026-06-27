@@ -15,6 +15,7 @@ const COPY = {
   './src/assets/logo-native-dark.svg': `${Utils.ADDON_PATH}/assets/`,
   './src/assets/logo-native-light.svg': `${Utils.ADDON_PATH}/assets/`,
   './src/assets/logo-native.svg': `${Utils.ADDON_PATH}/assets/`,
+  './LICENSE': `${Utils.ADDON_PATH}/`,
   './src/assets/logo.svg': `${Utils.ADDON_PATH}/assets/`,
   './src/assets/icon-16.png': `${Utils.ADDON_PATH}/assets/`,
   './src/assets/icon-32.png': `${Utils.ADDON_PATH}/assets/`,

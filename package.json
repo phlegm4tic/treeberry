@@ -8,6 +8,7 @@
     "dev": "node build/all.js --dev",
     "dev.chrome": "node build/all.js --dev --chromium",
     "build.chrome": "node build/all.js --chromium",
+    "pack.chrome": "npm run build.chrome && mkdir -p dist && rm -f dist/treebery-chrome.zip && cd addon && zip -r -q -X ../dist/treebery-chrome.zip . && cd ..",
     "dev.styles": "node build/styles.js --dev",
     "dev.html": "node build/html.js --dev",
     "dev.copy": "node build/copy.js --dev",
